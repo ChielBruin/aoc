@@ -50,7 +50,7 @@ def filter_part2(collisions):
     for (x, y, (l1, s1), (l2, s2)) in collisions:
         yield s1 + s2
 
-in_str = sys.stdin.read()
+in_str = sys.stdin.read()[1:]
 lines = [acc_map(line.split(','), (0,0,0), step) for line in in_str.split('\n') if line]
 
 print(min(filter_part1(collide(lines))))
