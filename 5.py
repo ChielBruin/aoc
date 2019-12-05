@@ -45,14 +45,14 @@ def run_machine(mem, inputs):
 
         elif opc is 5: # Jump if true
             c, trgt = load_param(mem, idx, modes, amount=2)
-            if not c is 0:
+            if not c == 0:
                 idx = trgt
             else:
                 idx += 3
 
         elif opc is 6: # Jump if false
             c, trgt = load_param(mem, idx, modes, amount=2)
-            if c is 0:
+            if c == 0:
                 idx = trgt
             else:
                 idx += 3
@@ -67,8 +67,8 @@ def run_machine(mem, inputs):
 
         elif opc is 8:  # Equal
             v1, v2 = load_param(mem, idx, modes, amount=2)
-            if v1 is v2:
-                store_param(mem, idx, 3, 1)
+            if v1 == v2:
+                store_param(mem, idx, 3, 1, modes=modes)
             else:
                 store_param(mem, idx, 3, 0, modes=modes)
             idx += 4
