@@ -9,7 +9,11 @@ def load_param(mem, idx, modes, amount=1):
             # Immediate mode
             yield mem[idx+i+1]
 
-def store_param(mem, idx, offset, val):
+def store_param(mem, idx, offset, val, modes=None):
+    mode_idx = offset -1
+    if modes and len(modes) > mode_idx and modes[mode_idx] is 1:
+        print(mode_idx, modes)
+        raise Exception('Invalid write mode')
     mem[mem[idx+offset]] = val
 
 def run_machine(mem, inputs):
@@ -20,18 +24,18 @@ def run_machine(mem, inputs):
 
         if opc is 1:    # add
             v1, v2 = load_param(mem, idx, modes, amount=2)
-            store_param(mem, idx, 3, v1 + v2)
+            store_param(mem, idx, 3, v1 + v2, modes=modes)
             idx += 4 # Move to next
 
         elif opc is 2:  # mul
             v1, v2 = load_param(mem, idx, modes, amount=2)
-            store_param(mem, idx, 3, v1 * v2)
+            store_param(mem, idx, 3, v1 * v2, modes=modes)
             idx += 4
 
         elif opc is 3:  # Input
             input = inputs[0]
             inputs = inputs[1:]
-            store_param(mem, idx, 1, input)
+            store_param(mem, idx, 1, input, modes=modes)
             idx += 2
 
         elif opc is 4: # Output
@@ -56,9 +60,9 @@ def run_machine(mem, inputs):
         elif opc is 7:  # less than
             v1, v2 = load_param(mem, idx, modes, amount=2)
             if v1 < v2:
-                store_param(mem, idx, 3, 1)
+                store_param(mem, idx, 3, 1, modes=modes)
             else:
-                store_param(mem, idx, 3, 0)
+                store_param(mem, idx, 3, 0, modes=modes)
             idx += 4
 
         elif opc is 8:  # Equal
@@ -66,7 +70,7 @@ def run_machine(mem, inputs):
             if v1 is v2:
                 store_param(mem, idx, 3, 1)
             else:
-                store_param(mem, idx, 3, 0)
+                store_param(mem, idx, 3, 0, modes=modes)
             idx += 4
 
         elif opc is 99:
